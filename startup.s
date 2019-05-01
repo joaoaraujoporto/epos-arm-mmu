@@ -90,7 +90,7 @@ MCR p15, 0, r1, c3, c0, 0 @ Write Domain Access Control Register
 	
 @ Enable MMU
 MRC p15, 0, r1, c1, c0, 0	@ Read Control Register configuration data
-BIC r1, r1, #0x1
+ORR r1, r1, #0x1
 MCR p15, 0, r1, c1, c0, 0	@ Write Control Register configuration data
 	
 @ Go to C program
