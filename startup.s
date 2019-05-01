@@ -44,7 +44,6 @@ MRC p15, 0, r1, c1, c0, 0   @ Read Control Register configuration data
 ORR r1, r1, #(0x1 << 11)    @ Global BP Enable bit
 MCR p15, 0, r1, c1, c0, 0   @ Write Control Register configuration data
 
-
 @ Enable D-side Prefetch
 MRC p15, 0, r1, c1, c0, 1 @ Read Auxiliary Control Register
 ORR r1, r1, #(0x1 <<2) @ Enable D-side prefetch
@@ -91,7 +90,7 @@ MCR p15, 0, r1, c3, c0, 0 @ Write Domain Access Control Register
 	
 @ Enable MMU
 MRC p15, 0, r1, c1, c0, 0	@ Read Control Register configuration data
-ORR r1, r1, #0x1
+BIC r1, r1, #0x1
 MCR p15, 0, r1, c1, c0, 0	@ Write Control Register configuration data
 	
 @ Go to C program
