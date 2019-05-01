@@ -1,3 +1,15 @@
+.equ Mode_FIQ, 0x11
+.equ Mode_IRQ, 0x12
+.equ Mode_SVC, 0x13
+
+LDR R0, =stack_top	@stack_base
+@ Enter each mode in turn and set up the stack pointer
+MSR CPSR_c, #Mode_FIQ:OR:I_Bit:OR:F_Bit ;
+MOV SP, R0
+SUB R0, R0, #FIQ_Stack_Size
+MSR CPSR_c, #Mode_IRQ:OR:I_Bit:OR:F_Bit ;
+MOV SP, R0
+
 @ Disable MMU
 MRC p15, 0, r1, c1, c0, 0 @ Read Control Register configuration data
 BIC r1, r1, #0x1
@@ -90,10 +102,10 @@ MCR p15, 0, r1, c3, c0, 0 @ Write Domain Access Control Register
 	
 @ Enable MMU
 MRC p15, 0, r1, c1, c0, 0	@ Read Control Register configuration data
-ORR r1, r1, #0x1
+BIC r1, r1, #0x1
 MCR p15, 0, r1, c1, c0, 0	@ Write Control Register configuration data
 	
 @ Go to C program
-LDR sp, =stack_top
+@LDR sp, =stack_top
 BL c_entry
 B .
