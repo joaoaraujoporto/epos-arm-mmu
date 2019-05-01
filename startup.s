@@ -70,7 +70,7 @@ SUBS r3, r3, #1 @ decrement loop counter
 BNE write_pte
 
 @ for the very first entry in the table, we will make it cacheable, normal, write-back, write allocate
-BIC r0, r0, #0xB @ clear CB bits
+BIC r0, r0, #0xC @ clear CB bits
 ORR r0, r0, #0X4 @ inner write-back, write allocate
 BIC r0, r0, #0x7000 @ clear TEX bits
 ORR r0, r0, #0x5000 @ set TEX as write-back, write allocate
