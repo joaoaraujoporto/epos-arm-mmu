@@ -1,15 +1,3 @@
-.equ Mode_FIQ, 0x11
-.equ Mode_IRQ, 0x12
-.equ Mode_SVC, 0x13
-
-LDR R0, =stack_top	@stack_base
-@ Enter each mode in turn and set up the stack pointer
-MSR CPSR_c, #Mode_FIQ:OR:I_Bit:OR:F_Bit ;
-MOV SP, R0
-SUB R0, R0, #FIQ_Stack_Size
-MSR CPSR_c, #Mode_IRQ:OR:I_Bit:OR:F_Bit ;
-MOV SP, R0
-
 @ Disable MMU
 MRC p15, 0, r1, c1, c0, 0 @ Read Control Register configuration data
 BIC r1, r1, #0x1
@@ -30,7 +18,7 @@ MCR p15, 0, r1, c7, c5, 0
 @ to make the code general purpose, we calculate the
 @ cache size first and loop through each set + way
 MRC p15, 1, r0, c0, c0, 0   @ Read Cache Size ID
-LDR r3, =stack_top
+LDR r3, =#0x1ff
 AND r0, r3, r0, LSR #13     @ r0 = no. of sets - 1
 
 MOV r1, #0                  @ r1 = way counter way_loop
@@ -79,6 +67,7 @@ write_pte:
 ORR r2, r0, r3, LSL #20 @ OR together address & default PTE bits
 STR r2, [r1, r3, LSL #2] @ write PTE to TTB
 SUBS r3, r3, #1 @ decrement loop counter
+CMP r3, #0
 BNE write_pte
 
 @ for the very first entry in the table, we will make it cacheable, normal, write-back, write allocate
@@ -102,10 +91,10 @@ MCR p15, 0, r1, c3, c0, 0 @ Write Domain Access Control Register
 	
 @ Enable MMU
 MRC p15, 0, r1, c1, c0, 0	@ Read Control Register configuration data
-BIC r1, r1, #0x1
+ORR r1, r1, #0x1
 MCR p15, 0, r1, c1, c0, 0	@ Write Control Register configuration data
 	
 @ Go to C program
-@LDR sp, =stack_top
+LDR sp, =stack_top
 BL c_entry
 B .

@@ -10,3 +10,6 @@ arm:
 
 qemu:
 	qemu-system-arm -M realview-pbx-a9 -nographic -kernel test.bin
+
+clean:
+	rm *o *bin *elf *~
