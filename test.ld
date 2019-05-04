@@ -5,10 +5,8 @@ SECTIONS
 	.text : { *(.text) }
 	.data : { *(data) }
 	.bss : { *(bss COMMON) }
-	. = ALIGN(16);
-	. = . + 0X1000; /* 4Kb of stack memory */
+	. = ALIGN(8);
+	. = . + 0x1000; /* 4KB of stack memory */
 	stack_top = .;
-	. = 0xFFFFFF;
-	. = ALIGN(16);
-	ttb_address = .;
+	ttb_address = 0xFA0000;
 }
