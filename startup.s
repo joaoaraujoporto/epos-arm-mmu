@@ -47,12 +47,12 @@ Reset_Handler:
 	@ It would be faster to create this in a read-only section in an assembly file
 	LDR r0, =0xDE2 @ r0 is the non-address part of descriptor
 	LDR r1, =ttb_address
-	LDR r3, = 2047 @ loop counter
+	LDR r3, = 4095 @ loop counter
 	write_pte:
 	ORR r2, r0, r3, LSL #20 @ OR together address & default PTE bits
 	STR r2, [r1, r3, LSL #2] @ write PTE to TTB
 	SUB r3, r3, #1 @ decrement loop counter
-	CMP r3, #0
+	CMP r3, #-1
 	BNE write_pte
 
 	@ for the very first entry in the table, we will make it cacheable, normal, write-back, write allocate

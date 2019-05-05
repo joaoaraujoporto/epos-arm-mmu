@@ -9,7 +9,7 @@ arm:
 	arm-none-eabi-objcopy -O binary test.elf test.bin
 
 qemu:
-	qemu-system-arm -M realview-pbx-a9 -nographic -kernel test.bin
+	qemu-system-arm -M realview-pbx-a9 -m 2048M -nographic -kernel test.bin
 
 clean:
 	rm *o *bin *elf *~
