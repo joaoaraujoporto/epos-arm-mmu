@@ -51,7 +51,7 @@ Reset_Handler:
 	write_pte:
 	ORR r2, r0, r3, LSL #20 @ OR together address & default PTE bits
 	STR r2, [r1, r3, LSL #2] @ write PTE to TTB
-	SUBS r3, r3, #1 @ decrement loop counter
+	SUB r3, r3, #1 @ decrement loop counter
 	CMP r3, #0
 	BNE write_pte
 
