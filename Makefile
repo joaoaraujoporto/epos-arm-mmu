@@ -12,4 +12,4 @@ qemu:
 	qemu-system-arm -M realview-pbx-a9 -m 2048M -nographic -kernel test.bin
 
 clean:
-	rm *o *bin *elf *~
+	rm *o *bin *elf
