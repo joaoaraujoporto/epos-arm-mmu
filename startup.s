@@ -46,7 +46,7 @@ Reset_Handler:
 	@ Invalidate TLB
 	MCR p15, 0, r1, c8, c7, 0
 
-	@ Aqui é criada uma L1 tranlastion table na RAM que divide
+	@ Aqui é criada uma L1 translation table na RAM que divide
 	@ todo o espaço de endereçamento de 4GB em seções de 1 MB,
 	@ todas com Full Access e Strongly Ordered
    	LDR r0, =0xDE2			@ Atribui-se ao R0 parte do descriptor
@@ -67,19 +67,20 @@ Reset_Handler:
 	BNE write_pte               	@ Caso o loop não tenha acabado,
 	                                @ escreve mais uma pte
 
-	@ for the very first entry in the table, we will make it
+	@ Faz-se a primeira entrada da tranlastion table
 	@ cacheable, normal, write-back, write allocate
-	BIC r0, r0, #0xC		@ clear CB bits
-	ORR r0, r0, #0X4 		@ inner write-back, write allocate
-	BIC r0, r0, #0x7000 		@ clear TEX bits
-	ORR r0, r0, #0x5000 		@ set TEX as write-back, write allocate
-	ORR r0, r0, #0x10000 		@ shareable
-	STR r0, [r1]
+	BIC r0, r0, #0xC		@ Limpa-se CB bits
+	ORR r0, r0, #0X4 		@ Write-back, write allocate
+	BIC r0, r0, #0x7000 		@ Limpa-se TEX bits
+	ORR r0, r0, #0x5000 		@ Faz-se TEX write-back e write allocate
+	ORR r0, r0, #0x10000 		@ Torna compartilhável
+	STR r0, [r1]			@ Escreve-se na primeira entrada
 
-	@ Initialize MMU
+	@ Inicializa a MMU
    	MOV r1,#0x0
-    	MCR p15, 0, r1, c2, c0, 2	@ Write Translation Table Base Control Register
-   	LDR r1, =ttb_address
+    	MCR p15, 0, r1, c2, c0, 2	@ Escrita do Translation Table Base Control Register
+   	LDR r1, =ttb_address		@ Atribui-se ao R1 endereço base
+   	                            	@ da L1 tranlastion table
    	MCR p15, 0, r1, c2, c0, 0	@ Escreve-se no reg 1 do coprocessor 15 o que ha 
                               		@ em r1 (endereco base da tranlastion table)
 
